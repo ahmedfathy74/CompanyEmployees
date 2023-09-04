@@ -2755,3 +2755,28 @@
 2023-09-04 16:35:04.0132 Trace FileTarget(Name=logfile) has 2 layouts
 2023-09-04 16:35:04.0307 Trace FileTarget(Name=logfile): Using appenderFactory: NLog.Internal.FileAppenders.SingleProcessFileAppender+Factory
 2023-09-04 16:35:04.0307 Info Configuration initialized.
+2023-09-04 16:38:48.9722 Info AppDomain Shutting down. LogFactory closing...
+2023-09-04 16:38:48.9722 Debug Stopping file watching for path 'C:\Users\AhmedMF\source\repos\CompanyEmployees\CompanyEmployees' filter 'nlog.config'
+2023-09-04 16:38:48.9811 Trace Flushing all 1 targets...
+2023-09-04 16:38:48.9811 Trace ForEachItemInParallel() 1 items
+2023-09-04 16:38:48.9811 Trace FileTarget(Name=logfile): FlushAsync
+2023-09-04 16:38:48.9991 Trace Continuation invoked: 
+2023-09-04 16:38:48.9991 Trace Parallel task completed. 0 items remaining
+2023-09-04 16:38:48.9991 Debug Flush completed
+2023-09-04 16:38:49.0133 Trace FileTarget(Name=logfile): FlushAsync Done
+2023-09-04 16:38:49.0133 Debug Closing logging configuration...
+2023-09-04 16:38:49.0133 Trace Closing FileTarget(Name=logfile)
+2023-09-04 16:38:49.0133 Debug FileTarget(Name=logfile): Closing...
+2023-09-04 16:38:49.0309 Debug FileTarget(Name=logfile): Closed.
+2023-09-04 16:38:49.0309 Trace Closing .\logs\${shortdate}_logfile.txt
+2023-09-04 16:38:49.0309 Trace Closing Layout Renderer: ${literal}
+2023-09-04 16:38:49.0309 Trace Closing Layout Renderer: ${shortdate}
+2023-09-04 16:38:49.0460 Trace Closing Layout Renderer: ${literal}
+2023-09-04 16:38:49.0460 Trace Closing ${longdate} ${level:uppercase=true} ${message}
+2023-09-04 16:38:49.0460 Trace Closing Layout Renderer: ${longdate}
+2023-09-04 16:38:49.0460 Trace Closing Layout Renderer: ${literal}
+2023-09-04 16:38:49.0608 Trace Closing Layout Renderer: ${level}
+2023-09-04 16:38:49.0608 Trace Closing Layout Renderer: ${literal}
+2023-09-04 16:38:49.0608 Trace Closing Layout Renderer: ${message}
+2023-09-04 16:38:49.0608 Debug Finished closing logging configuration.
+2023-09-04 16:38:49.0751 Info LogFactory has been closed.
