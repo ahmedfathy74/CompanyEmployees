@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using CompanyEmployees.CsvResponseImple;
+using Contracts;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
 using Repository;
@@ -40,5 +41,8 @@ namespace CompanyEmployees.Extensions
             IConfiguration configuration) =>
             services.AddDbContext<RepositoryContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+
+        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) =>
+            builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
     }
 }
