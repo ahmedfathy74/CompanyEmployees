@@ -18,6 +18,7 @@ namespace CompanyEmployees.Settings
 
             CreateMap<Employee, EmployeeDto>();
 
+            CreateMap<CompanyForCreationDto,Company>();
         }
     }
 }
