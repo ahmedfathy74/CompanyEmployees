@@ -49,6 +49,9 @@ namespace CompanyEmployees.Presentation.Controllers
             if(company is null)
                 return BadRequest("CompanyForCreationDto object is null");
 
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
+
             var createdCompany = _services.CompanyService.CreateCompany(company);
 
             return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
@@ -66,6 +69,33 @@ namespace CompanyEmployees.Presentation.Controllers
         public IActionResult DeleteCompany(Guid id)
         {
             _services.CompanyService.DeleteCompany(id, trackChanges: false);
+
+            return NoContent();
+        }
+
+        // we have here an issue when i try to update company and add nes employee return 500 internal server (somethig related with saving in the entities) 
+        //https://localhost:7085/api/companies/C9D4C053-49B6-410C-BC78-2D54A9991870
+        /*
+         * {
+            "name": "Advansys",
+            "address": "Free Zone, Nasr City",
+            "country": "Masr",
+            "employees": [
+                {
+                    "name": "ahmed mohamed fathy",
+                    "age": 22,
+                    "position": "senior Software developer"
+                }
+            ]
+            }
+         */
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company)
+        {
+            if (company is null)
+                return BadRequest("CompanyForUpdateDto object is null");
+
+            _services.CompanyService.UpdateCompany(id,company,trackChanges: true);
 
             return NoContent();
         }
