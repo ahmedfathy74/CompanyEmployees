@@ -19,7 +19,14 @@ namespace CompanyEmployees.Presentation.Controllers
 
         public CompaniesController(IServiceManager services) => _services = services;
 
-        [HttpGet]
+        [HttpOptions]
+        public IActionResult GetCompaniesOptions()
+        {
+            Response.Headers.Add("Allow", "GET, OPTIONS, POST");
+            return Ok();
+        }
+
+        [HttpGet(Name = "GetCompanies")]
         public async Task<IActionResult> GetCompanies()
         {
             //throw new Exception("Exception");
@@ -43,7 +50,7 @@ namespace CompanyEmployees.Presentation.Controllers
             return Ok(companies);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateCompany")]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
         {
             if(company is null)

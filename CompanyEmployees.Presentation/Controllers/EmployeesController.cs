@@ -26,6 +26,7 @@ namespace CompanyEmployees.Presentation.Controllers
          * For that reason, 
          * we didn’t place it in the [HttpGet] attribute as we did with the GetCompany action*/
         [HttpGet]
+        //[HttpHead]
         [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
         public async Task<IActionResult> GetEmployeesForCompany(Guid companyId , [FromQuery] EmployeeParameters employeeParameters)
         {
