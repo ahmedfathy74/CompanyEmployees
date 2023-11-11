@@ -40,6 +40,7 @@ builder.Services.AddControllers(config =>{
          config.RespectBrowserAcceptHeader = true;
          config.ReturnHttpNotAcceptable = true;
          config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+         config.CacheProfiles.Add("120SecondsDuration", new CacheProfile { Duration = 120 });
 }).AddXmlDataContractSerializerFormatters()
      .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
@@ -48,6 +49,12 @@ builder.Services.AddCustomMediaTypes();
 
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
 
+// add configuration for api versioning
+builder.Services.ConfigureVersioning();
+
+// add configuration for Caching
+builder.Services.ConfigureResponseCaching();
+builder.Services.ConfigureHttpCacheHeaders();
 
 // add support for custom validate not in the apiController attrribute
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -84,6 +91,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseCors("CorsPolicy");
+
+app.UseResponseCaching();
+
+app.UseHttpCacheHeaders();
 
 app.UseAuthorization();
 

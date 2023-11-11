@@ -1,4 +1,5 @@
 ﻿using CompanyEmployees.Presentation.ModelBinders;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -11,8 +12,10 @@ using System.Threading.Tasks;
 namespace CompanyEmployees.Presentation.Controllers
 {
     //[Route("api/[controller]")]
+    //[ApiVersion("1.0")]
     [Route("api/companies")]
     [ApiController]
+    //[ResponseCache(CacheProfileName = "120SecondsDuration")]
     public class CompaniesController : ControllerBase
     {
         private readonly IServiceManager _services;
@@ -36,6 +39,9 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}", Name = "CompanyById")]
+        //[ResponseCache(Duration = 60)] //--> this for caching in the header and select the duration
+        //[HttpCacheExpiration(CacheLocation =CacheLocation.Public,MaxAge =60)]
+        //[HttpCacheValidation(MustRevalidate =false)]
         public async Task<IActionResult> GetCompany(Guid id)
         {
             var company = await _services.CompanyService.GetCompanyAsync(id, trackChanges: false);
