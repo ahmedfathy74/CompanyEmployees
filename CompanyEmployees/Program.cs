@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Utility;
@@ -48,6 +49,7 @@ builder.Services.AddControllers(config =>{
 builder.Services.AddCustomMediaTypes();
 
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 // add configuration for api versioning
 builder.Services.ConfigureVersioning();
@@ -55,6 +57,16 @@ builder.Services.ConfigureVersioning();
 // add configuration for Caching
 builder.Services.ConfigureResponseCaching();
 builder.Services.ConfigureHttpCacheHeaders();
+
+// add configuration for Memory Cache
+builder.Services.AddMemoryCache();
+builder.Services.ConfigureRateLimitingOptions();
+builder.Services.AddHttpContextAccessor();
+
+// add configuration for idenetity using Microsoft Entity FrameWorkCore
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 // add support for custom validate not in the apiController attrribute
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -90,11 +102,15 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.All
 });
 
+app.UseIpRateLimiting();
+
 app.UseCors("CorsPolicy");
 
 app.UseResponseCaching();
 
 app.UseHttpCacheHeaders();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
