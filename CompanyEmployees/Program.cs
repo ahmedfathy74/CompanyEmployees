@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using NLog;
+using Shared.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,9 @@ builder.Services.ConfigureSqlContext(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(Program));
 
+// add vaildation service using action filters
+
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 // here i am delcare the project that request should go to this project first to find controllers inside it.
 builder.Services.AddControllers(config =>{
