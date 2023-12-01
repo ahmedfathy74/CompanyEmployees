@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using CompanyEmployees.Presentation.ActionFilters;
+using Entities.LinkModels;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.ActionFilters;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CompanyEmployees.Presentation.Controllers
@@ -22,12 +26,20 @@ namespace CompanyEmployees.Presentation.Controllers
         /*we have the companyId parameter in our action and this parameter will be mapped from the main route
          * For that reason, 
          * we didn’t place it in the [HttpGet] attribute as we did with the GetCompany action*/
-        [HttpGet] 
-        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId)
+        [HttpGet]
+        //[HttpHead]
+        [ServiceFilter(typeof(ValidateMediaTypeAttribute))]
+        public async Task<IActionResult> GetEmployeesForCompany(Guid companyId , [FromQuery] EmployeeParameters employeeParameters)
         {
-            var employees = await _service.EmployeeService.GetEmployeesAsync(companyId, trackChanges: false);
+            var linkParams = new LinkParameters(employeeParameters, HttpContext);
 
-            return Ok(employees);
+            var result = await _service.EmployeeService.GetEmployeesAsync(companyId,
+                linkParams,trackChanges: false);
+
+            Response.Headers.Add("X-Pagination",JsonSerializer.Serialize(result.metaData));
+
+            return result.linkResponse.HasLinks ? Ok(result.linkResponse.LinkedEntities) :
+                Ok(result.linkResponse.ShapedEntities);
         }
 
         [HttpGet("{id:guid}" , Name = "GetEmployeeForCompany")]
