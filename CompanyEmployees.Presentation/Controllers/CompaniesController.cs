@@ -32,7 +32,8 @@ namespace CompanyEmployees.Presentation.Controllers
         }
 
         [HttpGet(Name = "GetCompanies")]
-        [Authorize]
+        [Authorize(Roles ="Manager")] // this to make auuthorize for manager role only
+        //[Authorize] //--> this for aall user you must have a token too authorize from you to ensure that is you
         public async Task<IActionResult> GetCompanies()
         {
             //throw new Exception("Exception");

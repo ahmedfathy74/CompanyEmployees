@@ -49,12 +49,12 @@ namespace Service
             return (linkResponse: links, metaData:employeesWithMetaData.MetaData);
         }
 
+
         public async Task<EmployeeDto> GetEmployeeAsync(Guid companyId, Guid id, bool trackChanges)
         {
             await CheckIfCompanyExists(companyId, trackChanges);
 
-            if (company is null)
-                throw new CompanyNotFoundException(companyId);
+            var employeeDb = await GetEmployeeForCompanyAndCheckIfItExists(companyId, id, trackChanges);
 
             var employee = _mapper.Map<EmployeeDto>(employeeDb);
 
@@ -100,19 +100,30 @@ namespace Service
         public async Task<(EmployeeForUpdateDto employeeToPatch, Employee employeeEntity)> GetEmployeeForPatchAsync(Guid companyId, Guid id, bool compTrackChanges, bool empTrackChanges)
         {
             await CheckIfCompanyExists(companyId, compTrackChanges);
+            
+            var employeeDb = await GetEmployeeForCompanyAndCheckIfItExists(companyId, id, empTrackChanges); 
 
-            var employeeEntity = await _repository.Employee.GetEmployeeAsync(companyId, id,empTrackChanges);
-            if (employeeEntity is null)
-                throw new EmployeeNotFoundException(companyId);
-
-            var employeeToPatch = _mapper.Map<EmployeeForUpdateDto>(employeeDb);
+            var employeeToPatch = _mapper.Map<EmployeeForUpdateDto>(employeeDb); 
             return (employeeToPatch: employeeToPatch, employeeEntity: employeeDb);
         }
 
-        public async Task SaveChangesForPatchAsync(EmployeeForUpdateDto employeeToPatch, Employee employeeEntity)
+        private async Task CheckIfCompanyExists(Guid companyId, bool trackChanges)
         {
-            _mapper.Map(employeeToPatch, employeeEntity);
-            await _repository.SaveAsync();
+            var company = await _repository.Company.GetCompanyAsync(companyId, trackChanges); 
+            if (company is null)
+                throw new CompanyNotFoundException(companyId);
+        }
+        private async Task<Employee> GetEmployeeForCompanyAndCheckIfItExists(Guid companyId, Guid id, bool trackChanges) 
+        {
+            var employeeDb = await _repository.Employee.GetEmployeeAsync(companyId, id, trackChanges); 
+
+            if (employeeDb is null) 
+                throw new EmployeeNotFoundException(id); return employeeDb;
+        }
+
+        public Task SaveChangesForPatchAsync(EmployeeForUpdateDto employeeToPatch, Employee employeeEntity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

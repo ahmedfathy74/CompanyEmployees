@@ -38,7 +38,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 // add vaildation service using action filters
 
-builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.AddScoped<CompanyEmployees.Presentation.ActionFilters.ValidationFilterAttribute>();
 
 // here i am delcare the project that request should go to this project first to find controllers inside it.
 builder.Services.AddControllers(config =>{
@@ -53,7 +53,7 @@ builder.Services.AddControllers(config =>{
 builder.Services.AddCustomMediaTypes();
 
 builder.Services.AddScoped<ValidateMediaTypeAttribute>();
-builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.AddScoped<Shared.ActionFilters.ValidationFilterAttribute>();
 
 // add configuration for api versioning
 builder.Services.ConfigureVersioning();

@@ -44,7 +44,13 @@ namespace CompanyEmployees.Presentation.Controllers
             if(!await _service.AuthenticationService.ValidateUser(user))
                 return Unauthorized();
 
-            return Ok(new { Token = await _service.AuthenticationService.CreateToken() });
+            //var secret = Environment.GetEnvironmentVariable("SECRET");
+            //Console.WriteLine($"Secret: {secret}");
+
+           var tokenDto = await _service.AuthenticationService
+                .CreateToken(populateExp: true);
+
+            return Ok(tokenDto);
         }
     }
 }
