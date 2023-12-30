@@ -71,6 +71,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.AddJwtConfiguration(builder.Configuration);
 
 // add support for custom validate not in the apiController attrribute
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -78,8 +79,27 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
+// add configuration for swagger
+builder.Services.ConfigureSwagger();
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.AddPolicy("SwaggerPolicy", policy =>
+//    {
+//        policy.RequireAuthenticatedUser();
+//        // Add additional requirements as needed
+//    });
+//});
+
+
 
 var app = builder.Build();
+
+app.UseSwagger();
+
+app.UseSwaggerUI(s => {
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Code Maze API v1");
+    s.SwaggerEndpoint("/swagger/v2/swagger.json", "Code Maze API v2");
+});
 
 var logger = app.Services.GetRequiredService<ILoggerManager>();
 app.ConfigureExceptionHandler(logger);
@@ -96,6 +116,7 @@ if (app.Environment.IsProduction())
 //{
 //    app.UseHsts();
 //}
+
 
 app.UseHttpsRedirection();
 
